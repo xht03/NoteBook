@@ -819,6 +819,11 @@ open@^8.0.9:
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
 
+pandoc-binary@^2.14.0:
+  version "2.14.0"
+  resolved "https://registry.npmjs.org/pandoc-binary/-/pandoc-binary-2.14.0.tgz"
+  integrity sha512-F/Rvveyo/H3geQm3gUWrmlaNMlAtwKee9kq4tjPZaDZnQMNxvvMIT3nb+oZvOkv4ScLXbA3NMUhLywsURGUHgw==
+
 parseurl@~1.3.3:
   version "1.3.3"
   resolved "https://registry.npmjs.org/parseurl/-/parseurl-1.3.3.tgz"

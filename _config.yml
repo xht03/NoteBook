@@ -102,3 +102,7 @@ theme: cactus
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: ''
+
+
+pandoc:
+  path: ./node_modules/pandoc-binary/2.14.0.2/linux/pandoc
