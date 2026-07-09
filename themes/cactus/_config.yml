@@ -5,7 +5,7 @@
 # Link to a page that gives an overview of all your projects.
 # This can be an external link (e.g., to you GitHub profile) or to another
 # page within your website.
-projects_url: http://github.com/probberechts
+projects_url: https://github.com/xht03
 
 # Set the page direction to RTL or LTR. default is LTR. (if you set it 'rtl', the 'vazir' font will be loaded.)
 direction: ltr
@@ -17,7 +17,7 @@ nav:
   home: /
   about: /about/
   articles: /archives/
-  projects: http://github.com/probberechts
+  projects: https://github.com/xht03
 
 
 # Links to your social media accounts.
@@ -29,24 +29,21 @@ nav:
 social_links:
   -
     icon: github
-    link: http://github.com/probberechts/cactus-dark
+    link: https://github.com/xht03
   -
-    icon: twitter
-    link: /
+    icon: bilibili
+    label: Bilibili
+    link: https://space.bilibili.com/1151761154
   -
-    icon: facebook
-    link: /
+    icon: weixin
+    label: 微信
   -
     icon: mail
-    link: mailto:name@email.com
-  -
-    icon: mastodon
-    label: mastodon.social
-    link: https://mastodon.social/@alice
-  -
-    icon: mastodon
-    label: fosstodon.org
-    link: https://fosstodon.org/@alice
+    label: 邮箱
+    link: mailto:1620318777@qq.com
+
+# WeChat QR code shown on hover in the homepage contacts.
+wechat_qr: /images/wechat-QR.jpg
 
 # Customize the overview with displaying a tagcloud on the index page.
 # Options: https://hexo.io/docs/helpers.html#tagcloud
