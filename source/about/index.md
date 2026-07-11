@@ -3,13 +3,15 @@ title: About
 date: 2026-07-08 00:00:00
 ---
 
-这里写你的自我介绍。
+Hi, I am Haotian Xu, a Master's student in Computer Science at Fudan University, with plans to pursue a PhD.
 
-你可以在这里放这些内容：
+My interests are centered on **computer systems and architecture**, with a focus on:
 
-- 你是谁
-- 你在做什么
-- 你的技术栈或兴趣
-- 你的联系方式
+- processor design and computer architecture (inspired by my experience in a Loongson Cup CPU design competition)
+- compiler techniques and performance optimization
+- deep learning systems and GPU computing
+- system optimization for database and big-data workloads
 
-如果你愿意，我也可以继续帮你把这一页改成更像个人主页的样式。
+In my research, I aim to explore practical methods for hardware-software co-design under real-world workloads.
+
+I am always happy to discuss research collaboration, engineering projects, and technical ideas.
