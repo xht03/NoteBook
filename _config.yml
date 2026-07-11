@@ -3,14 +3,14 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: Haotian Xu
 subtitle: ''
 description: |
   Hi, I am Haotian Xu, a Master's student in Computer Science at Fudan University.
   My interests include computer systems and architecture, especially processor design, compiler optimization, and GPU/deep learning workloads.
   This site documents my study notes and research progress, and will continue to serve as my academic homepage for future PhD studies.
 keywords:
-author: John Doe
+author: Haotian Xu
 language: en
 timezone: ''
 

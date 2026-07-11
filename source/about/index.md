@@ -7,7 +7,7 @@ Hi, I am Haotian Xu, a Master's student in Computer Science at Fudan University,
 
 My interests are centered on **computer systems and architecture**, with a focus on:
 
-- processor design and computer architecture (inspired by my experience in a Loongson Cup CPU design competition)
+- processor design and computer architecture
 - compiler techniques and performance optimization
 - deep learning systems and GPU computing
 - system optimization for database and big-data workloads
