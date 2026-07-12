@@ -9,7 +9,13 @@ categories:
 
 ## English Summary
 
-This note introduces the basic setting of source coding in information theory. It defines a source, an encoding alphabet, and a source code, and explains how codewords are used to represent source symbols. The main goal is to achieve unambiguous decoding while keeping the average code length as small as possible.
+This note introduces the basic setting of source coding in information theory. It defines a source $S$ with a finite source alphabet $\{s_1, \dots, s_q\}$, an encoding alphabet $T$ of size $r$ (called the radix), and a source code $C: S \to T^+$ mapping each source symbol to a codeword $w_i$. The average code length is $L(C) = \sum p_i l_i$, and the two central aims are to guarantee unambiguous decoding and to make $L(C)$ as small as possible.
+
+The chapter first studies **uniquely decodable (u.d.) codes**, for which every encoded sequence $t \in C^*$ has only one decomposition into codewords. A precise characterization is given by the **Sardinas–Patterson theorem**: $C$ is uniquely decodable if and only if $C \cap C_\infty = \emptyset$, where $C_\infty$ is constructed inductively from overlapping codeword pairs.
+
+Next, **instantaneous codes** are introduced: codes that can be decoded symbol-by-symbol without waiting for future symbols. It is shown that a code is instantaneous if and only if it is a **prefix code** (no codeword is a prefix of another). Prefix codes can be visualized and constructed on an $r$-ary rooted tree by choosing vertices so that none dominates another.
+
+The existence of instantaneous $r$-ary codes with prescribed word lengths is governed by **Kraft’s inequality**: such a code exists if and only if $\sum_{i=1}^{q} r^{-l_i} \leq 1$. Surprisingly, **McMillan’s inequality** gives exactly the same necessary and sufficient condition for the broader class of uniquely decodable $r$-ary codes. As a consequence, for any given set of lengths there exists an instantaneous code exactly when there exists a uniquely decodable code. The chapter ends with remarks clarifying that Kraft’s and McMillan’s inequalities are existence conditions on lengths, not characterizations of individual codes.
 
 ## 1.1 Definitions and Examples
 
@@ -268,3 +274,144 @@ $$
 所以，问题在于，每个码字在 $T^*$ 中占据的比例总和超过了 1，因此无法构造这样的**即时二进制码**。
 
 上述例子中用到的**比例**（proportion）这一概念在分析**无限树** $T^*$ 时非常有用，但并不精确。通过对其进行精确化，我们可以类似地推出关于**即时 $r$-进制码**（instantaneous $r$-ary codes）存在性的**充要条件**，即我们可以判断是否能构造一个满足给定**码字长度**的**即时码**。
+
+## 1.5 Kraft's Inequality
+
+受到 §1.4 中示例的启发，我们得到以下结论，被称为 **Kraft 不等式**：  
+
+> **定理 1.20（Kraft's Inequality）**  
+> 对于一个 **$r$-进制即时码**（instantaneous $r$-ary code）$C$，其码字长度为 $l_1, l_2, \dots, l_q$，则该码能够存在的**充要条件**是：
+>
+> $$
+> \sum_{i=1}^{q} r^{-l_i} \leq 1
+> $$
+
+**证明**
+(<=) 我们可以对码字长度重新编号，使其满足以下顺序：$l_1 \leq l_2 \leq \dots \leq l_q$。设 $l = \max(l_1, \dots, l_q)$，并考虑树 $T^*$ 的一部分 $T^{\le l}$，定义为：$T^{\le l} = T^0 \cup T^1 \cup \dots \cup T^l$，即从根到最大高度为 $l$ 的所有节点组成的部分。显然，该树是一个**有限树**（finite tree）：
+
+- 在每个高度 $h = 0,1, \dots, l$ 处，树具有 $r^h$ 个顶点（即**长度为 $h$ 的所有可能单词**）。  
+
+- 高度为 $l$ 的所有 $r^l$ 个顶点，被称为叶子节点。
+
+我们可以为符号 $s_1$ **分配**一个**高度为** $l_1$ **的顶点** $w_1$，其长度为 $l_i$。接着，我们**修剪** $w_i$ 及其上方的整个子树 $T^{\le l}$，因为这些顶点不能再被使用。特别地，这一操作会移除 $r^{l - l_1}$ 个叶子节点，即所有以 $w_i$ 开头的长度为 $l$ 的单词（参见图 1.3）。
+
+![](https://ref.xht03.online/202503051443951.png)
+
+如果 $q > 1$， $r^{l-l_1} < r^l$ ，因此，在第一次修剪后，$T^{\le l}$ 至少有一个叶子节点未被修剪。我们截取该叶子节点的前 $l_2$ 个符号构造出第二个码字 $w_2$，其长度为 $l_2$。由于该节点不在 $w_1$ 之上，我们可以选择它作为新的码字。接着，我们修剪 $w_2$ 及其上方的整个子树 $T^{\le l}$，这样会进一步移除 $r^{l - l_2}$ 个叶子节点。由于没有叶子节点既位于 $w_1$ 之上又位于 $w_2$ 之上，因此两次修剪不会发生重叠。
+
+我们如此循环往复，每次选择一个码字并修剪，使得**没有任何一个码字在另一个码字的上方或下方**。当已选择了 $k$ 个码字 $w_1, w_2, \dots, w_k$ （其中 $k < q$）时，我们已经修剪了总计 $r^{l - l_1} + r^{l - l_2} + \dots - r^{l - l_k}$ 个叶子节点。
+ 
+由于
+
+$$
+\sum_{i=1}^{k} r^{l - l_i} < \sum_{i=1}^{q} r^{l - l_i} \le r^l
+$$
+
+所以，第k次修剪之后，至少还有一个叶子节点剩余，因此我们可以从该叶子节点的前 $l_{k+1}$ 个符号构造出新的码字 $w_{k+1}$，其长度为 $l_{k+1}$。按照这个方法，我们可以不断地选择新的码字，直到选择出 $w_q$ 为止。
+
+在整个过程中，前缀条件（prefix condition）始终成立，因此根据**定理 1.17**，最终构造出的编码集 $C = \{ w_1, w_2, \dots, w_q \}$ 是一个**瞬时码**（instantaneous code）。
+
+(=>) 如果 $C$ 是瞬时码，那么根据**定理 1.17**，它必须是前缀码（prefix code）。因此，树 $T^{\le l}$ 的每个叶子节点至多位于一个码字的**上方**。  
+
+对于 $C$ 中的每个码字 $w_i$，位于 $r^{l - l_i}$ 个叶子节点的下方（其中 $l_i = |w_i|$）。对所有码字 $w_i$ 求和，我们得到：$\sum_{i=1}^{q} r^{l - l_i}$ ，表示所有码字**上方的叶子总数**。由于树 $T^*_l$ 总共有 $r^l$ 个叶子节点，因此必须满足：
+
+$$
+\sum_{i=1}^{q} r^{l - l_i} \leq r^l
+$$  
+
+两边同时除以 $r^l$，我们得到 Kraft 不等式：
+
+$$
+\sum_{i=1}^{q} r^{-l_i} \leq 1
+$$
+
+## 1.6 McMillan's Inequality 
+
+我们已经看到，**唯一可译码的码类严格大于瞬时码的类**，因此我们可能会期望，对于唯一可译码的 $r$-进制码，其存在性的充分必要条件会**比 Kraft 不等式 (1.5) 更弱**。然而，令人惊讶的是，事实并非如此。McMillan 在 1956 年提出了以下不等式，被称为**McMillan 不等式** ：
+
+> **定理1.21（McMillan 不等式）**
+> 存在一个**唯一可译码的 $r$-进制码** $C$，其码字长度为 $l_1, l_2, \dots, l_q$，当且仅当满足以下不等式：
+>
+> $$
+> \sum_{i=1}^{q} r^{-l_i} \leq 1
+> $$
+
+**证明**
+(<=) 根据**定理 1.20（Kraft 不等式）**，存在一个瞬时 $r$-进制码，其码字长度为 $l_i$，则该码也是唯一可译码的，因为瞬时码本身就满足唯一可译码的性质。
+
+(=>) 设 $C$ 为一个唯一可译码的 $r$-进制码，其码字长度为 $l_1, l_2, \dots, l_q$。定义：  
+
+$$
+K = \sum_{i=1}^{q} \frac{1}{r^{l_i}}
+$$
+
+并设 $l = \max(l_1, \dots, l_q), \quad m = \min(l_1, \dots, l_q)$。现在考虑展开式：
+
+$$
+K^n = (\sum_{i=1}^{q} \frac{1}{r^{l_i}})^n
+$$
+
+其中 $n \geq 1$。该和式由以下形式的项组成：  
+
+$$
+\frac{1}{r^{l_{i_1}}} \times \frac{1}{r^{l_{i_2}}} \times \dots \times \frac{1}{r^{l_{i_n}}} = \frac{1}{r^j}
+$$
+
+其中 $j = l_{i_1} + l_{i_2} + \dots + l_{i_n}$。
+
+由于对所有 $i$ 都有 $m \leq l_i \leq l$，所以 $j$ 的取值范围为：$mn \leq j \leq ln$ 。将相同 $j$ 值的项收集在一起，我们可以写成：  
+
+$$
+K^n = \sum_{j=mn}^{ln} \frac{N_{j,n}}{r^j}
+$$
+
+$\frac{l}{r^j}$ 的系数 $N_{j,n}$ 表示将 $j$ 写成 $n$ 个码字长度之和（可能有重复）的方式数；等价地，$N_{j,n}$ 也是总长度为 $j$ 的 $n$ 个码字组成的序列 $t = w_{i_1} w_{i_2} \dots w_{i_n}$  的数量。
+
+由于 $C$ 是**唯一可译码**的，因此每个 $t$ 最多只能由一个码字序列生成。因此，$N_{j,n}$ 小于等于长度为 $j$ 的码序列的数量，即：$N_{j,n} \leq r^j$。
+
+由于 $K^n$ 是 $ ln - mn + 1 $ 的多个项之和，并且每项满足 $\frac{N_{j,n}}{r^j} \leq 1$，我们可以得到：
+
+$$
+K^n = \sum_{j=mn}^{ln} \frac{N_{j,n}}{r^j} \leq (l-m)n + 1
+$$
+
+对于所有 $n \geq 1$，现在 $K$、$l$、$m$ 与 $n$ 无关，因此如果 $K > 1$，则该不等式的左边会呈指数级增长，而右边仅会线性增长。对于足够大的 $n$，这种增长速度的差异与上式矛盾，因此我们必须有 $K \leq 1$。
+
+以上证明来自于 Karush ；原始证明使用了复函数。定理 1.20 和 1.21 立即推导出：
+
+> **推论 1.22**
+> 存在一个码字长度为 $l_1, \dots, l_q$ 的瞬时 $r$-进制码，当且仅当：存在一个具有这些码字长度的唯一可译的 $r$-进制码。
+
+## 1.7 Comments on Kraft's and McMillan's Inequalities
+
+**注释 1.23**
+
+定理 1.20 和 1.21 并未表明：如果一个码是瞬时码或唯一可译码， 其中它的 $r$-进制码的码字长度为 $l_1, \dots, l_q$，当且仅当 $\sum r^{-l_i} \leq 1$ 时。
+
+例如，二进制码 $C = \{0, 01, 011\}$ 具有码字长度 $l_1 = 1, l_2 = 2, l_3 = 3$，因此：$\sum r^{-l_i} = \frac{1}{2} + \frac{1}{4} + \frac{1}{8} = \frac{7}{8} \leq 1$ 。然而，该码并不是前缀码，因此它不是瞬时码。同样，可以找到一个具有相同码字长度但不是唯一可译的二进制码，例如：$C = \{0, 01, 001\}$ 。这个例子显然不是唯一可译码。
+
+---
+
+**注释 1.24**
+
+但是，定理 1.20 和 1.21 断言：如果满足 $\sum r^{-l_i} \leq 1$ ，那么一定**存在**满足这些参数的码，它既是**瞬时码**又是**唯一可译码**。
+
+例如，二进制码 $C = \{0, 10, 110\}$ 是一个**前缀码**，因此同时满足瞬时性和唯一可译性。
+
+---
+
+**注释 1.25**
+
+如果一个 $r$-进制码 $C$ 是**唯一可译码**，那么它**不一定**是**瞬时码**。但根据推论 1.22，必然存在一个**具有相同码字长度**的瞬时 $r$-进制码。
+
+例如，在例 1.14 中，二进制码：$C = \{0, 01, 11\}$ 是**唯一可译码**，但**不是瞬时码**。  
+
+然而，在例 1.16 中，具有**相同码字长度**的瞬时码：$V = \{0, 10, 11\}$ 满足瞬时性。
+
+---
+
+**注释 1.26**
+
+在和式 $K = \sum r^{-l_i}$ 中，每一项 $r^{-l_i}$ 对应于树 $T^*$ 中高度为 $l_i$ 的顶点 $w_i$ 之上的"比例"（proportion）。  
+
+这种解释虽然不够严格，但在 §1.4 中已被使用。它有助于理解为何需要满足 $K \leq 1$。
