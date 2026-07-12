@@ -7,16 +7,6 @@ categories:
 - Information and Coding Theory
 ---
 
-## English Summary
-
-This note introduces the basic setting of source coding in information theory. It defines a source $S$ with a finite source alphabet $\{s_1, \dots, s_q\}$, an encoding alphabet $T$ of size $r$ (called the radix), and a source code $C: S \to T^+$ mapping each source symbol to a codeword $w_i$. The average code length is $L(C) = \sum p_i l_i$, and the two central aims are to guarantee unambiguous decoding and to make $L(C)$ as small as possible.
-
-The chapter first studies **uniquely decodable (u.d.) codes**, for which every encoded sequence $t \in C^*$ has only one decomposition into codewords. A precise characterization is given by the **Sardinas–Patterson theorem**: $C$ is uniquely decodable if and only if $C \cap C_\infty = \emptyset$, where $C_\infty$ is constructed inductively from overlapping codeword pairs.
-
-Next, **instantaneous codes** are introduced: codes that can be decoded symbol-by-symbol without waiting for future symbols. It is shown that a code is instantaneous if and only if it is a **prefix code** (no codeword is a prefix of another). Prefix codes can be visualized and constructed on an $r$-ary rooted tree by choosing vertices so that none dominates another.
-
-The existence of instantaneous $r$-ary codes with prescribed word lengths is governed by **Kraft’s inequality**: such a code exists if and only if $\sum_{i=1}^{q} r^{-l_i} \leq 1$. Surprisingly, **McMillan’s inequality** gives exactly the same necessary and sufficient condition for the broader class of uniquely decodable $r$-ary codes. As a consequence, for any given set of lengths there exists an instantaneous code exactly when there exists a uniquely decodable code. The chapter ends with remarks clarifying that Kraft’s and McMillan’s inequalities are existence conditions on lengths, not characterizations of individual codes.
-
 ## 1.1 Definitions and Examples
 
 信息论关注的是信息从发送者通过信道传输到接收者的过程。发送者和接收者可以是人或者机器。在大多数情况下，发送者和接收者是不同的，但当信息被存储以供日后检索时，接收者可以是未来某个时间的发送者。
