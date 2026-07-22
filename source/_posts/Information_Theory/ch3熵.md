@@ -394,3 +394,187 @@ $$
 Shannon-Fano 码通常接近最优。若用于信源的扩展编码（见 §2.6），其性能将更接近最优。我们将在下一节研究信源扩展的熵，以便为 §3.6 中的证明做准备。
 
 ## 3.5 Entropy of Extensions and Products
+
+回忆第 2.6 节的内容，源 $S^n$ 有 $q^n$ 个符号 $s_{i_1}s_{i_2}\cdots s_{i_n}$，其对应的概率为 $p_{i_1}p_{i_2}\cdots p_{i_n}$。如果我们将 $S^n$ 看作 $n$ 个相互独立的 $S$ 的副本，那么我们应该期望它产生的信息量是单个 $S$ 的 $n$ 倍。这启发我们得到如下定理：
+
+> 定理 3.20
+>
+> 对于任意信息源 $S$：
+>
+> $$
+> H_r(S^n)=nH_r(S)
+> $$
+
+在证明这个定理之前，我们需要先推广**扩展（extension）**的概念，引入**信息源乘积（product of sources）**。设 $S$ 和 $T$ 是两个信息源：$S$ 的符号为 $s_i$，对应概率为 $p_i$；$T$ 的符号为 $t_j$，对应概率为 $q_j$。
+
+我们定义它们的乘积：
+
+$$
+S \times T
+$$
+
+为一个新的信息源。该信息源的符号由符号对组成：
+
+$$
+(s_i,t_j)
+$$
+
+为了简化记号，我们将其写作：
+
+$$
+s_it_j
+$$
+
+其概率为：
+
+$$
+P(s_i,t_j)
+$$
+
+也就是说，$S \times T$ 可以看作两个信息源同时产生符号：$S$ 输出符号 $s_i$，$T$ 输出符号 $t_j$。然后将二者组合成一个新的符号。
+
+如果对于所有 $i,j$：
+
+$$
+P(s_i,t_j)=p_iq_j
+$$
+
+则称 $S$ 和 $T$ 是**独立的（independent）**。
+
+例如：两个相距很远的城市的每日天气可以看作两个独立的信息源。但是，如果两个城市距离很近，它们的天气可能相互影响，因此不再独立.
+
+> 引理 3.21
+>
+> 如果 $S$ 和 $T$ 是独立的信息源，则：
+>
+> $$
+> H_r(S \times T)=H_r(S)+H_r(T)
+> $$
+
+**证明**
+
+由于 $S$ 和 $T$ 独立：$P(s_it_j)=p_iq_j$。
+
+因此：
+
+$$
+\begin{aligned}
+H_r(S\times T)
+&=-\sum_i\sum_j p_iq_j\log_r(p_iq_j)\\
+&=-\sum_i\sum_j p_iq_j(\log_r p_i+\log_r q_j)\\
+&=-\sum_i\sum_j p_iq_j\log_r p_i
+-\sum_i\sum_j p_iq_j\log_r q_j\\
+&=\left(-\sum_i p_i\log_r p_i\right)
+\left(\sum_j q_j\right)
++\left(\sum_i p_i\right)
+\left(-\sum_j q_j\log_r q_j\right)\\
+&=\left(-\sum_i p_i\log_r p_i\right)
++\left(-\sum_j q_j\log_r q_j\right)\\
+&=H_r(S)+H_r(T)
+\end{aligned}
+$$
+
+证毕。$\square$
+
+我们可以利用**数学归纳法（induction）**，将信息源乘积的定义推广到任意有限个信息源。
+
+定义：
+
+$$
+S_1\times\cdots\times S_n
+=
+(S_1\times\cdots\times S_{n-1})\times S_n
+$$
+
+也就是说，多个信息源的乘积可以递归地定义为：
+
+- 先计算前 $n-1$ 个信息源的乘积；
+- 再将结果与第 $n$ 个信息源进行乘积。
+
+由此，我们不难得到：
+
+> 推论 3.22
+>
+> 如果：
+>
+> $$
+> S_1,S_2,\cdots,S_n
+> $$
+>
+> 是相互独立的信息源，则：
+>
+> $$
+> H_r(S_1\times\cdots\times S_n)
+> =
+> H_r(S_1)+\cdots+H_r(S_n)
+> $$
+
+回到本节 §3.5 开篇提出的定理 3.20，它可以被推论 3.22 直接证明。
+
+## 3.6 Shannon's First Theorem
+
+定理 3.11 指出，对于信息源 $S$ 的任意唯一可译（uniquely decodable）的 $r$ 元码 $C$，其平均码长满足：
+
+$$
+L(C)\geq H_r(S)
+$$
+
+而推论 3.12 表明，这个下界通常无法达到。
+
+然而，我们将证明，在第 2.6 节末尾提出的思想——**使用 $S^n$ 的最优码（optimal code）作为 $S$ 的编码方式**，可以使我们对 $S$ 进行编码，并且当 $n\rightarrow\infty$ 时，时，平均码长无限接近 $H_r(S)$。
+
+回忆一下，如果 $S^n$ 的某个码具有平均码长 $L_n$，那么当它作为 $S$ 的编码方式时，其平均码长为 $\frac{L_n}{n}$。
+
+根据推论 3.17，$S^n$ 的最优 $r$ 元码具有平均码长 $L_n$，满足：
+
+$$
+H_r(S^n)\leq L_n\leq 1+H_r(S^n)
+$$
+
+由定理 3.20：
+
+$$
+H_r(S^n)=nH_r(S)
+$$
+
+因此：
+
+$$
+nH_r(S)\leq L_n\leq 1+nH_r(S)
+$$
+
+两边同时除以 $n$：
+
+$$
+H_r(S)\leq \frac{L_n}{n}
+\leq
+\frac{1}{n}+H_r(S)
+$$
+
+因此：
+
+$$
+\lim_{n\rightarrow\infty}\frac{L_n}{n}
+=
+H_r(S)
+$$
+
+这证明了 **Shannon 第一理论（Shannon's First Theorem）**，也称为**无噪声编码定理（Noiseless Coding Theorem）**。
+
+> 定理 3.23（Shannon 第一理论）
+>
+> 通过对 $S^n$ 进行编码，当 $n$ 足够大时，可以找到信息源 $S$ 的唯一可译 $r$ 元编码，使其平均码长能够**任意接近**熵 $H_r(S)$。
+
+使用这个定理的代价在于，许多时候：
+
+$$
+\frac{L_n}{n}\rightarrow H_r(S)
+$$
+
+的收敛速度相当缓慢，因此为了实现高效编码，我们可能需要取一个非常大的 $n$。
+
+假设信息源 $S$ 有 $q$ 个符号，则 $S^n$ 拥有：$q^n$ 个符号。随着 $n$ 增大：$q^n$ 会快速增长。这意味着：构造对应的编码会变得复杂；编码过程会变得耗时。此外，解码过程也会产生延迟，因为我们必须等待完整的长度为 $n$ 的符号块被接收之后，才能进行解码。
+
+因此，在实际应用中，我们可能需要在效率和复杂度之间权衡，选择一个较小的 $n$。
+
+## 3.7 An Example of Shannon's First Theorem
