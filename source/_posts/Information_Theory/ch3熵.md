@@ -578,3 +578,234 @@ $$
 因此，在实际应用中，我们可能需要在效率和复杂度之间权衡，选择一个较小的 $n$。
 
 ## 3.7 An Example of Shannon's First Theorem
+
+设信息源 $S$ 有两个符号 $s_1,s_2$，其概率分别为：$p_1=\frac23$、$p_2=\frac13$，如例 3.2 所示。我们在第 3.1 节中看到 $H_2(S)=\log_2 3-\frac23\approx 0.918$，并且在第 2.6 节中，通过对 $S^n$ 使用二元 Huffman 编码，当 $n=1,2,3$ 时，我们得到平均码长 $\frac{L_n}{n}\approx 1,\ 0.944,\ 0.938$
+
+对于更大的 $n$，使用 **Shannon-Fano 编码**比 Huffman 编码更加简单。
+
+虽然 Shannon-Fano 编码效率略低，但是更容易处理，且同样满足：当 $n\rightarrow\infty$ 时，
+
+$$
+\frac{L_n}{n}\rightarrow H_r(S)
+$$
+
+---
+
+对于 $S^n$，共有 $2^n$ 个符号。每个符号都是长度为 $n$ 的符号块：
+
+$$
+s=s_1s_2\cdots s_n
+$$
+
+其中每个位置上的符号为 $s_1$ 或 $s_2$。
+
+假设某个符号块 $s$ 中包含 $k$ 个符号 $s_1$，则剩余 $n-k$ 个符号为 $s_2$。因此：
+
+$$
+\Pr(s)
+=
+\left(\frac23\right)^k
+\left(\frac13\right)^{n-k}
+=
+\frac{2^k}{3^n}
+$$
+
+对于每个 $k=0,1,\cdots,n$，满足条件的符号 $s$ 的数量为 $\binom nk$。
+
+因为这表示从 $n$ 个位置中选择 $k$ 个位置放置 $s_1$。
+
+根据第 3.4 节的 Shannon-Fano 编码方法，我们给每个这样的符号 $s$ 分配码字长度：
+
+$$
+l_k
+=
+\left\lceil
+\log_2\frac1{\Pr(s)}
+\right\rceil
+=
+\left\lceil
+\log_2\frac{3^n}{2^k}
+\right\rceil
+=
+\left\lceil
+n\log_2 3-k
+\right\rceil
+$$
+
+令 $a_n=\lceil n\log_2 3\rceil$，则：
+
+$$
+l_k=a_n-k
+$$
+
+编码 $S^n$ 时的平均码长为：
+
+$$
+L_n
+=
+\sum_{k=0}^{n}
+\binom nk
+\Pr(s)l_k
+$$
+
+代入 $l_k$ 和 $\Pr(s)$：
+
+$$
+L_n
+=
+\sum_{k=0}^{n}
+\binom nk
+\frac{2^k}{3^n}
+(a_n-k)
+$$
+
+整理：
+
+$$
+L_n
+=
+\frac1{3^n}
+\left(
+a_n\sum_{k=0}^{n}
+\binom nk2^k
+-
+\sum_{k=0}^{n}
+k\binom nk2^k
+\right)
+\tag{3.9}
+$$
+
+根据二项式定理：
+
+$$
+(1+x)^n
+=
+\sum_{k=0}^{n}
+\binom nkx^k
+\tag{3.10}
+$$
+
+我们得到：
+
+$$
+\sum_{k=0}^{n}
+\binom nk2^k
+=
+3^n
+$$
+
+此外，对式 (3.10) 求导：
+
+$$
+n(1+x)^{n-1}
+=
+\sum_{k=1}^{n}
+k\binom nkx^{k-1}
+$$
+
+两边乘以 $x$：
+
+$$
+nx(1+x)^{n-1}
+=
+\sum_{k=0}^{n}
+k\binom nkx^k
+$$
+
+再次令 $x=2$，得到：
+
+$$
+\sum_{k=0}^{n}
+k\binom nk2^k
+=
+2n3^{n-1}
+$$
+
+代入式 (3.9)：
+
+$$
+\begin{aligned}
+L_n
+&=
+\frac1{3^n}
+(a_n3^n-2n3^{n-1}) \\
+&=
+a_n-\frac{2n}{3}
+\end{aligned}
+$$
+
+
+所以：
+
+$$
+\begin{aligned}
+\frac{L_n}{n}
+&=
+\frac{a_n}{n}-\frac23 \\
+&=
+\frac{\lceil n\log_23\rceil}{n}
+-\frac23
+\end{aligned}
+$$
+
+由于：
+
+$$
+n\log_23
+\leq
+\lceil n\log_23\rceil
+<
+1+n\log_23
+$$
+
+两边除以 $n$：
+
+$$
+\log_23
+\leq
+\frac{\lceil n\log_23\rceil}{n}
+<
+\frac1n+\log_23
+$$
+
+因此，当 $n\rightarrow\infty$ 时：
+
+$$
+\frac{\lceil n\log_23\rceil}{n}
+\rightarrow
+\log_23
+$$
+
+于是：
+
+$$
+\frac{L_n}{n}
+\rightarrow
+\log_23-\frac23
+\approx0.918
+$$
+
+因此，我们验证了 Shannon 第一理论对于该信息源成立。
+
+---
+
+对于 $n=1,\dots,10$，平均码长 $L=\frac{L_n}{n}$ 以及编码效率 $\eta=\frac{H}{L}$ 如下表：
+
+| $n$ | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| $a_n$ | 2 | 4 | 5 | 7 | 8 | 10 | 12 | 13 | 15 | 16 |
+| $L$ | 1.333 | 1.333 | 1 | 1.083 | 0.933 | 1 | 1.048 | 0.958 | 1 | 0.933 |
+| $\eta$ | 0.689 | 0.689 | 0.918 | 0.848 | 0.984 | 0.918 | 0.876 | 0.959 | 0.918 | 0.984 |
+
+这说明 $\eta\rightarrow1$，也就是说：当 $n\rightarrow\infty$ 时，$L\rightarrow H$。不过，该收敛过程相当缓慢且不规则。
+
+如果不使用 Shannon-Fano 编码，而对 $S^n$ 使用 Huffman 编码，则得到（$n\le5$）：
+
+| $n$ | 1 | 2 | 3 | 4 | 5 |
+|---|---|---|---|---|---|
+| $L$ | 1 | 0.944 | 0.938 | 0.938 | 0.923 |
+| $\eta$ | 0.918 | 0.972 | 0.979 | 0.979 | 0.995 |
+
+可以看到，在这种情况下 $\eta\rightarrow1$ 更快。
+
+不过，对于某些 $n$，例如 $n=5$，Shannon-Fano 编码的效率几乎与 Huffman 编码相同。原因是 $3^5=243\approx256=2^8$，因此，$S^5$ 中符号概率的倒数 $\frac1{\Pr(s)} = \frac{3^n}{2^k}$ 接近某个 $2$ 的整数次幂略小于 $2$ 的幂。所以使用向上取整函数 $\lceil\log_2\frac1{\Pr(s)}\rceil$ 时产生的影响很小。
