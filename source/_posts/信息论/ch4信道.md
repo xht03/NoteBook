@@ -1,5 +1,5 @@
 ---
-title: Chapter 4 Information Channels
+title: EIT 4 Information Channels
 date: 2025-04-20 11:04:10
 tags:
 - translation
@@ -279,3 +279,33 @@ $$
 下一节中，我们将考虑这些公式的一些具体例子。
 
 ## 4.2 The Binary Symmetric Channel
+
+最简单且最常用的信息信道 $\varGamma$ 之一是**二进制对称信道**（Binary Symmetric Channel，简称 **BSC**），它已在例 4.1 中有所介绍。鉴于其重要性，我们将在本节对其进行更详细的研究。
+
+回顾一下，该信道定义如下：
+
+1. $A = B = \mathbf{Z}_2 = \{0, 1\}$，
+
+2. 信道矩阵的形式为：
+
+$$
+M = \begin{pmatrix} P_{00} & P_{01} \\ P_{10} & P_{11} \end{pmatrix} = \begin{pmatrix} P & \bar{P} \\ \bar{P} & P \end{pmatrix}
+$$
+
+其中某个 $P$ 满足 $0 \le P \le 1$。（为了记号上的方便，此处我们使用下标 $i, j = 0, 1$ 而不是 $1, 2$，使得在 §4.1 的记号中 $a_i = i$ 且 $b_j = j$。）
+
+条件 1 说明 $\varGamma$ 是**二进制**的，条件 2 说明 $\varGamma$（对于符号 0 和 1）是**对称**的，其含义在于：无论输入符号 $a = 0$ 还是 $1$，每个输入符号 $a$ 被正确或错误传输的概率均为 $P$ 或 $\bar{P}$。
+
+输入概率的形式为：
+
+$$p_0 = \Pr(a = 0) = p,$$
+$$p_1 = \Pr(a = 1) = \bar{p},$$
+
+其中某个 $p$ 满足 $0 \le p \le 1$。因此，信道关系 (4.2) 变为：
+
+$$q_0 = \Pr(b = 0) = pP + \bar{p}\bar{P},$$
+$$q_1 = \Pr(b = 1) = p\bar{P} + \bar{p}P;$$
+
+记 $q_0 = q$ 以及 $q_1 = \bar{q}$，我们得到：
+
+$$(q, \bar{q}) = (p, \bar{p}) \begin{pmatrix} P & \bar{P} \\ \bar{P} & P \end{pmatrix},$$

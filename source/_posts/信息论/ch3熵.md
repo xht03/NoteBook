@@ -1,5 +1,5 @@
 ---
-title: Chapter 3 Entropy
+title: EIT 3 Entropy
 date: 2025-04-03 18:13:10
 tags:
 - translation

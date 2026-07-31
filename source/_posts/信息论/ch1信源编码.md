@@ -1,5 +1,5 @@
 ---
-title: Chapter 1 Source coding
+title: EIT 1 Source coding
 date: 2025-02-19 20:32:50
 tags:
 - translation

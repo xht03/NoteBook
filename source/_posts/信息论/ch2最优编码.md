@@ -1,5 +1,5 @@
 ---
-title: Chapter 2 Optimal Codes
+title: EIT 2 Optimal Codes
 date: 2025-03-10 10:16:20
 tags:
 - translation

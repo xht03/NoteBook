@@ -1,5 +1,5 @@
 ---
-title: Lecture 1 Signals and Systems
+title: DSP 1 Signals and Systems
 date: 2025-06-26 21:03:24
 tags:
 - note
