@@ -282,12 +282,14 @@ Z 变换具有许多重要性质，其中线性、时间移位和时域卷积在
 设：
 
 $$
-x_1(n) \xleftrightarrow{\mathcal Z} X_1(z)
+x_1(n)
+\overset{\mathcal Z}{\leftrightarrow}
+X_1(z)
 $$
 
 $$
 x_2(n)
-\xleftrightarrow{\mathcal Z}
+\overset{\mathcal Z}{\leftrightarrow}
 X_2(z)
 $$
 
@@ -313,7 +315,7 @@ $$
 $$
 \boxed{
 ax_1(n)+bx_2(n)
-\xleftrightarrow{\mathcal Z}
+\overset{\mathcal Z}{\leftrightarrow}
 aX_1(z)+bX_2(z)
 }
 $$
@@ -328,7 +330,7 @@ $$
 
 $$
 x(n)
-\xleftrightarrow{\mathcal Z}
+\overset{\mathcal Z}{\leftrightarrow}
 X(z)
 $$
 
@@ -363,7 +365,7 @@ $$
 $$
 \boxed{
 x(n-k)
-\xleftrightarrow{\mathcal Z}
+\overset{\mathcal Z}{\leftrightarrow}
 z^{-k}X(z)
 }
 $$
@@ -380,13 +382,13 @@ $$
 
 $$
 x_1(n)
-\xleftrightarrow{\mathcal Z}
+\overset{\mathcal Z}{\leftrightarrow}
 X_1(z)
 $$
 
 $$
 x_2(n)
-\xleftrightarrow{\mathcal Z}
+\overset{\mathcal Z}{\leftrightarrow}
 X_2(z)
 $$
 
@@ -454,7 +456,7 @@ $$
 $$
 \boxed{
 x_1(n)*x_2(n)
-\xleftrightarrow{\mathcal Z}
+\overset{\mathcal Z}{\leftrightarrow}
 X_1(z)X_2(z)
 }
 $$
