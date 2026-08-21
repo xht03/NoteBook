@@ -282,7 +282,7 @@ Z 变换具有许多重要性质，其中线性、时间移位和时域卷积在
 设：
 
 $$
-x_1(n)\xleftrightarrow{\mathcal Z}X_1(z)
+x_1(n) \xleftrightarrow{\mathcal Z} X_1(z)
 $$
 
 $$
