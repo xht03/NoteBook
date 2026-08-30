@@ -436,8 +436,8 @@ $$
 $$
 \begin{aligned}
 y(n)
-&= T\left\{\sum_{k=-\infty}^{+\infty}x(k)\delta(n-k)\right\}\\
-&= \sum_{k=-\infty}^{+\infty}x(k)T\{\delta(n-k)\}\\
+&= T\left[\sum_{k=-\infty}^{+\infty}x(k)\delta(n-k)\right]\\
+&= \sum_{k=-\infty}^{+\infty}x(k)T[\delta(n-k)]\\
 &= \sum_{k=-\infty}^{+\infty}x(k)h(n-k)\\
 &= x(n)*h(n)
 \end{aligned}
