@@ -573,3 +573,33 @@ $$
 $$
 x(n) * h(n) = \sum_{k=-\infty}^{\infty} x(k) h(n-k)
 $$
+
+### 离散时间 LTI 系统的输出
+
+与连续时间系统类似，离散时间 LTI 系统的输出也等于输入与冲激响应的卷积。设离散时间 LTI 系统为 $T$，输入为 $x(n)$，输出为 $y(n)=T\{x(n)\}$。
+
+离散时间信号可以表示为一系列移位单位采样序列的线性组合：
+
+$$
+x(n)=\sum_{k=-\infty}^{+\infty}x(k)\delta(n-k)
+$$
+
+定义系统对单位采样序列 $\delta(n)$ 的响应为**单位冲激响应** $h(n)$：
+
+$$
+h(n)=T\{\delta(n)\}
+$$
+
+若系统具有**时不变性**，则输入延迟 $k$ 个采样点时，输出也相应延迟 $k$ 个采样点，即 $h(n-k)=T\{\delta(n-k)\}$。再结合**线性**，将求和与常数系数移出系统算子：
+
+$$
+\begin{aligned}
+y(n)
+&= T\left\{\sum_{k=-\infty}^{+\infty}x(k)\delta(n-k)\right\}\\
+&= \sum_{k=-\infty}^{+\infty}x(k)T\{\delta(n-k)\}\\
+&= \sum_{k=-\infty}^{+\infty}x(k)h(n-k)\\
+&= x(n)*h(n)
+\end{aligned}
+$$
+
+因此，只要知道离散时间 LTI 系统对单位采样序列的响应 $h(n)$，就能得到它对任意输入的响应 $y(n)=x(n)*h(n)$。
