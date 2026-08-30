@@ -263,7 +263,7 @@ B_x
 \end{aligned}
 $$
 
-令 $B_y=B_x\sum_{k=-\infty}^{\infty}|h(k)|$ ，则 $B_y$ 是个有限常数。
+令 $B_y=B_x\sum_{k=-\infty}^{\infty}|h(k)|$ ，则 $B_y$ 是一个有限常数。
 
 (<=) 必要性：欲证明: $\text{系统稳定} \to h(n)\text{绝对可和}$ 。考虑反证法，假设：
 
@@ -313,9 +313,7 @@ $$
 \sum_{n=0}^{N-1}|h(n)|<\infty
 $$
 
-所以，**有限系数的 FIR LTI 滤波器一定是 BIBO 稳定的。**
-
-此外，FIR 滤波器还可以通过适当设计 $h(n)$ 的对称性，比较容易地获得严格的线性相位。
+所以，**有限系数的 FIR LTI 滤波器一定是 BIBO 稳定的**。此外，FIR 滤波器还可以通过适当设计 $h(n)$ 的对称性，比较容易地获得严格的线性相位。
 
 ---
 
@@ -346,7 +344,6 @@ $$
 代入 $h(k)=\left(\frac12\right)^k$ 得到：
 
 $$
-
 y(n)
 =
 x(n)
@@ -455,9 +452,13 @@ H(z)
 \frac{
 \displaystyle\sum_{k=0}^{M}b_kz^{-k}
 }{
-\displaystyle1-\sum_{k=0}^{N}a_kz^{-k}
+\displaystyle1-\sum_{k=1}^{N}a_kz^{-k}
 }
 $$
+
+需要注意的是，这里由 $Y(z)/X(z)$ 得到的系统函数 $H(z)$，与前面把 $H(z)$ 看作冲激响应 $h(n)$ 的 Z 变换是同一个对象：因为 $y(n)=x(n)*h(n)$，由 Z 变换的时域卷积性质有 $Y(z)=X(z)H(z)$，故 $H(z)=\dfrac{Y(z)}{X(z)}$。
+
+同时，这个一般差分方程也把 FIR 与 IIR 统一了起来：当所有 $a_k=0$ 时，$H(z)$ 退化为关于 $z^{-1}$ 的多项式，对应 FIR；只要存在非零的 $a_k$，$H(z)$ 就是分母非平凡的有理函数，对应 IIR，而 $\sum_{k=1}^{N}a_k y(n-k)$ 正是前面所说的“反馈”项。
 
 因此，Z 变换在离散系统分析中的一个重要作用，就是将时域中的延迟 $x(n-k)$ 转化为 Z 域中的乘法 $z^{-k}X(z)$ 从而把原本包含多个延迟项的差分方程转化为关于 $X(z)$ 和 $Y(z)$ 的代数方程。
 
@@ -602,10 +603,7 @@ $$
 ### 偶对称
 
 $$
-h(n)
-====
-
-h(N-1-n)
+h(n) = h(N-1-n)
 $$
 
 此时相位为：
@@ -619,39 +617,25 @@ $$
 因此群时延为：
 
 $$
-\tau
-====
-
-\frac{N-1}{2}
+\tau = \frac{N-1}{2}
 $$
 
 ### 奇对称
 
 $$
-h(n)
-====
-
--h(N-1-n)
+h(n) = -h(N-1-n)
 $$
 
 其相位可以写为：
 
 $$
-\theta(\omega)
-=
-
--\frac{\pi}{2}
-
-\frac{N-1}{2}\omega
+\theta(\omega) = -\frac{\pi}{2} - \frac{N-1}{2}\omega
 $$
 
 同样具有固定的群时延：
 
 $$
-\tau
-====
-
-\frac{N-1}{2}
+\tau = \frac{N-1}{2}
 $$
 
 由于 $h(n)$ 可以是偶对称或奇对称，而序列长度 $N$ 又可以是奇数或偶数，因此一共有四种情况：
@@ -710,9 +694,7 @@ FIR 滤波器常见的设计方法有：
 首先进行 DTFT 反变换：
 
 $$
-h_d(n)
-======
-
+h_d(n) =
 \frac{1}{2\pi}
 \int_{-\pi}^{\pi}
 H_d(e^{j\omega})e^{j\omega n}
@@ -754,16 +736,10 @@ $$
 考虑一个截止频率为 $\omega_c$ 的理想线性相位低通滤波器：
 
 $$
-H_d(e^{j\omega})
-================
-
+H_d(e^{j\omega}) =
 \begin{cases}
-e^{-j\omega\alpha},
-&
-|\omega|\leq\omega_c\
-0,
-&
-\omega_c<|\omega|\leq\pi
+e^{-j\omega\alpha}, & |\omega|\leq\omega_c\\
+0, & \omega_c<|\omega|\leq\pi
 \end{cases}
 $$
 
@@ -772,9 +748,7 @@ $$
 对其进行 DTFT 反变换：
 
 $$
-h_d(n)
-======
-
+h_d(n) =
 \frac{1}{2\pi}
 \int_{-\omega_c}^{\omega_c}
 e^{-j\omega\alpha}e^{j\omega n}
@@ -784,9 +758,7 @@ $$
 即：
 
 $$
-h_d(n)
-======
-
+h_d(n) =
 \frac{1}{2\pi}
 \int_{-\omega_c}^{\omega_c}
 e^{j\omega(n-\alpha)}
@@ -796,9 +768,7 @@ $$
 当 $n\neq\alpha$ 时：
 
 $$
-h_d(n)
-======
-
+h_d(n) =
 \frac{\sin[\omega_c(n-\alpha)]}
 {\pi(n-\alpha)}
 $$
@@ -806,9 +776,7 @@ $$
 当 $n=\alpha$ 时：
 
 $$
-h_d(\alpha)
-===========
-
+h_d(\alpha) =
 \frac{\omega_c}{\pi}
 $$
 
@@ -818,12 +786,8 @@ $$
 h_d(n)=
 \begin{cases}
 \dfrac{\sin[\omega_c(n-\alpha)]}
-{\pi(n-\alpha)},
-&
-n\neq\alpha[8pt]
-\dfrac{\omega_c}{\pi},
-&
-n=\alpha
+{\pi(n-\alpha)}, & n\neq\alpha\\[8pt]
+\dfrac{\omega_c}{\pi}, & n=\alpha
 \end{cases}
 $$
 
@@ -846,11 +810,9 @@ $$
 最简单的窗函数是矩形窗：
 
 $$
-R_N(n)
-======
-
+R_N(n) =
 \begin{cases}
-1,&0\leq n\leq N-1\
+1,&0\leq n\leq N-1\\
 0,&\text{其他}
 \end{cases}
 $$
@@ -858,10 +820,7 @@ $$
 使用矩形窗：
 
 $$
-h(n)
-====
-
-h_d(n)R_N(n)
+h(n) = h_d(n)R_N(n)
 $$
 
 也就是直接将 $h_d(n)$ 在 $0\sim N-1$ 之外的部分全部截去。
@@ -869,9 +828,7 @@ $$
 矩形窗的频率响应为：
 
 $$
-W_R(e^{j\omega})
-================
-
+W_R(e^{j\omega}) =
 e^{-j\omega\frac{N-1}{2}}
 \frac{\sin(N\omega/2)}
 {\sin(\omega/2)}
@@ -908,9 +865,7 @@ $$
 所以：
 
 $$
-H(e^{j\omega})
-==============
-
+H(e^{j\omega}) =
 \frac{1}{2\pi}
 H_d(e^{j\omega})
 *
@@ -1010,9 +965,7 @@ $$
 Bartlett 窗又称**三角窗**：
 
 $$
-w(n)
-====
-
+w(n) =
 1-
 \left|
 \frac{2n-(N-1)}{N-1}
@@ -1028,13 +981,8 @@ $$
 Hann 窗也常称为汉宁窗或 Hanning 窗，是一种升余弦窗：
 
 $$
-w(n)
-====
-
-## 0.5
-
-0.5
-\cos
+w(n) =
+0.5 - 0.5\cos
 \left(
 \frac{2\pi n}{N-1}
 \right)
@@ -1053,13 +1001,8 @@ Hann 窗进一步降低了旁瓣，因此能够获得更好的阻带衰减，但
 Hamming 窗是改进的升余弦窗：
 
 $$
-w(n)
-====
-
-## 0.54
-
-0.46
-\cos
+w(n) =
+0.54 - 0.46\cos
 \left(
 \frac{2\pi n}{N-1}
 \right)
@@ -1158,8 +1101,7 @@ $$
 B_t
 \leq
 \omega_p-\omega_s
-=================
-
+=
 \frac{\pi}{4}
 $$
 
@@ -1167,8 +1109,7 @@ Hann 窗的过渡带宽度参考值约为：
 
 $$
 B_t
-===
-
+=
 \frac{6.2\pi}{N}
 $$
 
@@ -1196,10 +1137,9 @@ $$
 
 $$
 \alpha
-======
-
-# \frac{N-1}{2}
-
+=
+\frac{N-1}{2}
+=
 12
 $$
 
@@ -1211,8 +1151,7 @@ $$
 
 $$
 \omega_c
-========
-
+=
 \frac{\omega_p+\omega_s}{2}
 $$
 
@@ -1220,13 +1159,11 @@ $$
 
 $$
 \omega_c
-========
-
+=
 \frac{
 \frac{\pi}{2}+\frac{\pi}{4}
 }{2}
-====
-
+=
 \frac{3\pi}{8}
 $$
 
@@ -1234,15 +1171,10 @@ $$
 
 $$
 H_d(e^{j\omega})
-================
-
+=
 \begin{cases}
-0,
-&
-|\omega|<\dfrac{3\pi}{8}[6pt]
-e^{-j12\omega},
-&
-\dfrac{3\pi}{8}\leq|\omega|\leq\pi
+0, & |\omega|<\dfrac{3\pi}{8}\\[6pt]
+e^{-j12\omega}, & \dfrac{3\pi}{8}\leq|\omega|\leq\pi
 \end{cases}
 $$
 
@@ -1264,27 +1196,20 @@ $$
 
 $$
 h_d(n)
-======
-
-## \delta(n-\alpha)
-
+=
+\delta(n-\alpha)
+-
 h_{LP}(n)
 $$
 
 其中：
 
 $$
-h_{LP}(n)
-=========
-
+h_{LP}(n) =
 \begin{cases}
 \dfrac{\sin[\omega_c(n-\alpha)]}
-{\pi(n-\alpha)},
-&
-n\neq\alpha[8pt]
-\dfrac{\omega_c}{\pi},
-&
-n=\alpha
+{\pi(n-\alpha)}, & n\neq\alpha\\[8pt]
+\dfrac{\omega_c}{\pi}, & n=\alpha
 \end{cases}
 $$
 
@@ -1300,18 +1225,13 @@ $$
 
 $$
 h_d(n)
-======
-
+=
 \begin{cases}
 -\dfrac{
 \sin\left[\dfrac{3\pi}{8}(n-12)\right]
 }
-{\pi(n-12)},
-&
-n\neq12[10pt]
-1-\dfrac38=\dfrac58,
-&
-n=12
+{\pi(n-12)}, & n\neq12\\[10pt]
+1-\dfrac38=\dfrac58, & n=12
 \end{cases}
 $$
 
@@ -1322,13 +1242,8 @@ $$
 选择长度为 $N=25$ 的 Hann 窗：
 
 $$
-w(n)
-====
-
-## 0.5
-
-0.5
-\cos
+w(n) =
+0.5 - 0.5\cos
 \left(
 \frac{2\pi n}{24}
 \right),
@@ -1405,8 +1320,7 @@ $$
 
 $$
 \hat b_k
-========
-
+=
 b_k+\Delta b_k
 $$
 

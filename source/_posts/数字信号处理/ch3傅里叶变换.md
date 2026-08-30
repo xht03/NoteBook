@@ -287,7 +287,7 @@ $$
 $$
 
 $$
-\tau(\omega) = \frac{d\phi(\omega)}{d\omega} \text{称为群延迟}
+\tau(\omega) = -\frac{d\phi(\omega)}{d\omega} \text{称为群延迟}
 $$
 
 ---
