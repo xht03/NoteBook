@@ -71,7 +71,7 @@ $F(j\omega)$ 有时也简写为 $F(\omega)$ 。
 
 ## 傅里叶变换的物理意义
 
-由于 $f(t)$ 是实函数，所以 $F(\omega)$ 的虚部为零。
+由于 $f(t)$ 是实函数，所以 $F(\omega)$ 满足共轭对称性 $F(-\omega)=\overline{F(\omega)}$，即 $|F(\omega)|$ 关于 $\omega$ 为偶函数、$\phi(\omega)$ 为奇函数。于是 $f(t)$ 的被积函数虚部关于 $\omega$ 为奇函数，在整个实轴上积分为零，因此可以略去。
 
 $$
 \begin{aligned}
