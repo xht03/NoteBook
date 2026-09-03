@@ -888,6 +888,7 @@ $$
 ---
 
 > 例 1
+> 
 > 要求设计一个线性相位高通 FIR 滤波器 $\omega_p=\frac{\pi}{2}$，$\omega_s=\frac{\pi}{4}$，通带最大衰减为 $\alpha_p=1\text{ dB}$，阻带最小衰减为 $\alpha_s=40\text{ dB}$。
 
 **解**：
