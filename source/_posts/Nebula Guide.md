@@ -40,8 +40,6 @@ categories:
 | 生态丰富 | Console/Studio/Dashboard/Importer/Exchange/Operator/Bench 等官方工具 |
 | 访问控制 | 严格 RBAC 角色权限，支持 LDAP 等外部认证 |
 
----
-
 ## 2 核心概念和数据模型
 
 | 术语 | 一句话 | 类比 |
@@ -191,8 +189,6 @@ NebulaGraph = **Graph 服务（计算）+ Meta 服务（元数据）+ Storage �
 三服务还各有 Raft/Admin/HTTP 等内部端口，见[官方附录“产品端口全集”](https://docs.nebula-graph.com.cn/3.8.0/20.appendix/port-guide/)。
 
 ![](https://ref.xht03.online/202609072308632.svg)
-
----
 
 ### 3.1 Graph 服务
 
@@ -472,8 +468,6 @@ PROFILE FORMAT="row" GO FROM 1 OVER knows YIELD dst(edge) AS friend_id;
 | NULL | 属性默认允许 NULL，可用 `NOT NULL` + `DEFAULT` |
 | 复合类型 | `List []`、`Set {}`、`Map {}` **不能作为点/边属性存储**（仅表达式/中间结果可用） |
 | 地理空间 | `GEOGRAPHY`（点/线/面），插入需经 `ST_GeogFromText` 等函数 |
-
----
 
 ### 5.4 DDL
 
@@ -888,8 +882,6 @@ GET SUBGRAPH WITH PROP 2 STEPS FROM "player101" YIELD VERTICES AS nodes, EDGES A
 | 库内 schema | `SHOW TAGS` / `SHOW EDGES` / `SHOW TAG INDEXES` / `SHOW TAG INDEX STATUS` / `SHOW CREATE TAG xxx` | metad | 这个 space 里定义了哪些点/边类型、建了哪些索引、索引建好没 |
 | 统计 | `SUBMIT JOB STATS` / `SHOW STATS` | metad 派 job 到 storage 扫数，结果存回 metad | 图里各类点边各有多少——喂给优化器/代价模型 |
 
----
-
 ### 5.7 子句与复合查询
 
 一条查询最后都会产出一张**表**。如何将查询结果写出来？Nebula 给了**两套**说法：
@@ -990,8 +982,6 @@ GO FROM $id.id OVER follow YIELD dst(edge) AS who2;            # 用：以 $id.i
 | `$-` | 管道**紧邻上游**正喂到的**这一行**，取列写 `$-.col` | 只在自己紧挨的那一段里；每根管道重绑一次 |
 | `$^` / `$$` | 这一跳这条边的**起点 / 终点顶点**，取属性写 `$^.tag.prop` | 只在逐边遍历（GO 这类）那一句的 YIELD 里；每跳重定义 |
 | `src()/dst()/type()/rank()` | 把一个**“边值”**拆回 起点VID / 终点VID / 边类型 / rank | 手里有边值就能用（GO 的 YIELD、FETCH/LOOKUP） |
-
----
 
 而 MATCH 族**没有这套符号、也不认管道**。若它同样想“把上一步的结果接着用”，则靠两个自己的子句：
 
@@ -1112,8 +1102,6 @@ Start ──► B 分支的若干节点 ──┘
 | 连接/集合 | `InnerJoin`/`LeftJoin`、`Union`、`Intersect`、`Minus` |
 | 逻辑控制 | `Start`（图的起点/叶子）、`Loop`（把一段子计划重复跑 N 遍，多跳/变长用）、`Select`（条件分支） |
 | 其它 | DML → `executor/mutate/`；DDL → `executor/maintain/`；`SHOW TAGS` 等 → `executor/admin/` |
-
----
 
 ### 6.3 EXPLAIN / PROFILE：把计划打出来看
 
