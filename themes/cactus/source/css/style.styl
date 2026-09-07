@@ -237,10 +237,12 @@ pre
     border: none
 
 code
-  padding: 0 5px
-  border: 1px dotted $color-border
-  border-radius: 2px
-  -webkit-border-radius: 2px
+  padding: 2px 5px
+  border: none
+  border-radius: 3px
+  background: lighten($color-background, 5%)
+  color: #56b6c2
+  font-family: $font-family-mono
 
 .highlight
   overflow-x: auto
@@ -296,6 +298,10 @@ code
 
   table
     width: auto
+
+  td
+    padding: 0 8px
+    border: none
 
   td.gutter
     text-align: right

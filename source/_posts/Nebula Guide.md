@@ -7,7 +7,7 @@ categories:
 - Digital Signal Processing
 ---
 
-本内容来源：
+本篇内容来源：
 
 - **第一部分（基础：是什么/架构/语法）** 以[官方中文文档 v3.8.0 社区版](https://docs.nebula-graph.com.cn/3.8.0)为准。自 3.5.0 起官方文档只覆盖**社区版**功能，企业版能力（图算法、向量检索、更强 Studio/Dashboard 等）不在其中。
 - **第二部分（进阶：执行/优化器/统计）** 以 [Github开源源码](https://github.com/vesoft-inc/nebula)（3.x 主线 master 快照，`git log -1 = cdef57e5f`）为**源码实证**，并标注哪些是推断。企业版 v5.4 与社区 3.8.0 的关系/差异。
@@ -16,11 +16,11 @@ categories:
 
 | 主线 | 章节 | 内容 | 优先级 |
 |---|---|---|---|
-| 认知线 | Part 1–3 | NebulaGraph 是什么、核心概念、系统架构 | 必读 |
-| 动手线 | Part 4–5 | 本机实操 + nGQL 语法 | 必读 |
-| 课题线 ★ | Part 6–7 | 查询如何执行、优化器/统计现状、课题改动地图 | **核心**，反复精读 |
+| 认知线 | 1–3 | NebulaGraph 是什么、核心概念、系统架构 | 必读 |
+| 动手线 | 4–5 | 本机实操 + nGQL 语法 | 必读 |
+| 课题线 ★ | 6–7 | 查询如何执行、优化器/统计现状、课题改动地图 | **核心**，反复精读 |
 
-# Part 1 NebulaGraph 是什么
+## 1 NebulaGraph 是什么
 
 > NebulaGraph 是一款**开源的、分布式的、易扩展的原生图数据库**，能承载**数千亿点、数万亿边**的超大规模图数据，提供**毫秒级**查询。
 
@@ -34,13 +34,15 @@ categories:
 |---|---|
 | 高性能 | C++ 原生内核，毫秒级查询，专为 SSD 设计 |
 | 易扩展 | **shared-nothing 架构**，可**不停服**扩缩容 |
-| 高可用 | 存储多副本 + Raft 一致性（见 Part 3） |
+| 高可用 | 存储多副本 + Raft 一致性（见第3节） |
 | 强 Schema 与灵活建模 | 点/边属性可自由增删改（有 schema 但可 ALTER） |
 | 类 SQL 语言 nGQL | **部分兼容 openCypher**，学习成本相对低 |
 | 生态丰富 | Console/Studio/Dashboard/Importer/Exchange/Operator/Bench 等官方工具 |
 | 访问控制 | 严格 RBAC 角色权限，支持 LDAP 等外部认证 |
 
-# Part 2 核心概念和数据模型
+---
+
+## 2 核心概念和数据模型
 
 | 术语 | 一句话 | 类比 |
 |---|---|---|
@@ -58,7 +60,9 @@ categories:
 
 六大要素：图空间 Space、点 Vertex、边 Edge、标签 Tag、边类型 Edge type、属性 Property。下面逐个展开。
 
-## 图空间 Space
+---
+
+### 2.1 图空间 Space
 
 - 用于**隔离不同团队/项目的数据**：不同 Space 数据互不可见、物理隔离，可各自指定副本数、分片数、权限。
 
@@ -78,7 +82,9 @@ USE basketballplayer;                 # 切换当前工作空间（单条语句�
 SHOW CREATE SPACE basketballplayer;   # 回看建空间语句
 ```
 
-## 点 Vertex 与 VID
+---
+
+### 2.2 点 Vertex 与 VID
 
 - **点 = 实体**（比如一个球员、一个账号）。一个点可以有 **0~多个 Tag**（3.x 起不再强制至少一个 Tag）。
 
@@ -99,7 +105,9 @@ SHOW CREATE SPACE basketballplayer;   # 回看建空间语句
 > 所以“按 VID 快”并不是给 VID 单独建了索引，而是：① 点/边 key 以 VID 为核心（同一 VID 的点属性、出入边在 SST 里排在一起，可点查+范围扫）；② 热数据块留在内存缓存。
 > 注意与**用户建的索引**区分：`CREATE TAG INDEX ON player(name)` 建的是**另一份独立的 KV 数据**（key=索引属性，指向 VID），同样存放在这套 LSM 引擎里。
 
-## 标签 Tag
+---
+
+### 2.3 标签 Tag
 
 - Tag 是一组预定义属性的集合，作用类似关系型数据库“**点表**的表结构”。
 
@@ -112,7 +120,9 @@ CREATE TAG player(name string, age int);
 CREATE TAG team(name string);
 ```
 
-## 边 Edge / 边类型 Edge type / Rank
+---
+
+### 2.4 边 Edge / 边类型 Edge type / Rank
 
 - **边 = 两个点之间的关系**。Nebula **只有有向边**（`src -> dst`），不存在无向边。
 
@@ -136,13 +146,15 @@ INSERT EDGE follow(degree) VALUES "player101" -> "player100":(95);
 INSERT EDGE e1 () VALUES "10"->"11"@1:();        # @1 = rank=1 的边
 ```
 
-## 属性 Property
+---
+
+### 2.5 属性 Property
 
 - 属性 = **键值对**。建 Tag/Edge type 时给每个属性定类型（`string`/`int`/`double`/`timestamp` 等）。
 
 - 属性支持 `DEFAULT`、`NOT NULL`、`TTL`（见 5.x）。
 
-## 路径 Path
+### 2.6 路径 Path
 
 | 类型 | 点可否重复 | 边可否重复 | 用到的语句 |
 |---|---|---|---|
@@ -152,7 +164,9 @@ INSERT EDGE e1 () VALUES "10"->"11"@1:();        # @1 = rank=1 的边
 
 在NGQL中，写 `GO` 允许绕圈（walk）；写 `MATCH`/`FIND PATH`/`GET SUBGRAPH` 检索的是 trail，不会重复走同一条边。理解这一点，才能预期多跳查询“会不会有环”。
 
-## 索引
+---
+
+### 2.7 索引
 
 - **索引用于按属性定位点/边**（`LOOKUP` 依赖索引；`MATCH` 3.5.0 起可不建索引全表扫描，但慢且可能 OOM，建议带过滤或索引）。
 
@@ -160,9 +174,11 @@ INSERT EDGE e1 () VALUES "10"->"11"@1:();        # @1 = rank=1 的边
 
 - 存量数据必须 `REBUILD TAG/EDGE INDEX` 才查询得到；无唯一索引；复合索引不能跨 Tag/Edge type、遵循最左匹配。
 
-- 具体语法与约束见 Part 5.7。
+- 具体语法与约束见 5.7。
 
-# Part 3 系统架构
+---
+
+## 3 系统架构
 
 NebulaGraph = **Graph 服务（计算）+ Meta 服务（元数据）+ Storage 服务（存储）**，每类服务独立二进制/进程，可部署在一台或多台机器。
 
@@ -174,9 +190,11 @@ NebulaGraph = **Graph 服务（计算）+ Meta 服务（元数据）+ Storage �
 
 三服务还各有 Raft/Admin/HTTP 等内部端口，见[官方附录“产品端口全集”](https://docs.nebula-graph.com.cn/3.8.0/20.appendix/port-guide/)。
 
-![alt text](nebula_architecture.svg)
+![](https://ref.xht03.online/202609072308632.svg)
 
-## Graph 服务
+---
+
+### 3.1 Graph 服务
 
 graphd 处理一条 nGQL 的宏观四步（文档明示）：解析 -> 校验 -> 生成执行计划 -> 执行，对应模块：
 
@@ -194,7 +212,9 @@ graphd 处理一条 nGQL 的宏观四步（文档明示）：解析 -> 校验 ->
 
 - graphd 是**无状态计算层**，可多实例，前端负载均衡即可水平扩展。
 
-## Meta 服务
+---
+
+### 3.2 Meta 服务
 
 - metad 集群本身是 **Raft 组**：1 Leader + 若干 Follower，**只有 Leader 对外服务**；Leader 故障自动重选，数据不丢（生产建议 3 个进程且不同机器）。
 
@@ -213,7 +233,9 @@ graphd 处理一条 nGQL 的宏观四步（文档明示）：解析 -> 校验 ->
 >
 > 因为要“超过半数”才算数，**副本数必须是奇数**：3 副本容忍挂 1 台，5 副本容忍挂 2 台；2 副本挂 1 台就失去多数，没有意义。在 Nebula 里，**Meta 服务的元数据**与 **Storage 里每个分区的数据**都各自构成 Raft 组来保证高可用——这也是建 Space 时 `replica_factor`（每分区副本数）被要求为奇数、生产建议 3 的原因。
 
-## Storage 服务
+---
+
+### 3.3 Storage 服务
 
 Storage 面对的是一个远超单机容量的图空间，它需要解决三件事：**怎么切碎（分片）？怎么摆到多台机器（放置）？坏了怎么不丢、并发怎么不错（副本 + Raft）？**这三件事正好对应 Storage 的三层架构：
 
@@ -231,7 +253,7 @@ Storage 面对的是一个远超单机容量的图空间，它需要解决三件
 
 ---
 
-### 怎么切碎（分片）
+#### 怎么切碎（分片）
 
 Nebula 底层根本不存“图”。 Storage 的最底部只是一张大得多的、按 key 排好序的 KV（RocksDB）。图并不存在，它只是被“编码”进了这些 KV 的 key 里。具体做法是：**把一条数据的一切信息都塞进 key，而 key 的最高位就是分区号。** 点和边的 key 大致长这样：
 
@@ -243,7 +265,7 @@ edge   key :  partId | VID | 边类型（带正负号） | rank | 另一顶点 V
 其中分片算法如下：
 
 $$
-\text{partId} = (\text{hash}(\text{VID}) \bmod \text{partition\_num}) + 1
+partId = \left(hash(VID) \bmod partition\_num\right) + 1
 $$
 
 注意取模与 `+1` 的**顺序**：先对 VID 取模，再加 1，这是因为：分区号是从 1 开始编号的（源码为 `vid % numParts + 1`，并断言 `pId > 0`）。对 `int64` 型 VID，“hash” 就是它本身、直接取模；``FIXED_STRING` 型才先做 `MurmurHash2`。
@@ -263,7 +285,7 @@ $$
 
 ---
 
-### 怎么摆到多台机器（放置）。
+#### 怎么摆到多台机器（放置）。
 
 - “分区 -> 物理机”的映射是随机的。一个分区的副本存放于哪些机器上，不是靠数学规则推导出来的，而是建 Space / 加机器时 Meta 随手分配的一个放置方案（只保证同一分区的副本不落在同一台机器）。
 
@@ -271,9 +293,11 @@ $$
 
 - 负载均衡是手动的，不自动做（防止自动搬迁影响线上）。
 
-# Part 4 Nebula 本地部署
+---
 
-## 源码编译
+## 4 Nebula 本地部署
+
+### 4.1 源码编译
 
 Nebula Graph 提供单机和分布式两种版本，因为它由**开关** `ENABLE_STANDALONE_VERSION` 决定：
 
@@ -317,7 +341,9 @@ cmake --install build --prefix "$INSTALL_DIR"
 
 - 成功后到安装目录检查产物：单机版应看到 `$INSTALL_DIR/bin/nebula-standalone`，配置为 `$INSTALL_DIR/etc/nebula-standalone.conf.default`（分布式版才会出现三个 daemon 和各自的 `.conf`）。
 
-## 启停与连接
+---
+
+### 4.2 启停与连接
 
 ```bash
 # 启动/状态/停止
@@ -334,7 +360,9 @@ SHOW HOSTS;      # 集群状态
 SHOW SPACES;     # 现有图空间
 ```
 
-## 创建 Space
+---
+
+### 4.3 创建 Space
 
 ```ngql
 CREATE SPACE IF NOT EXISTS demo(
@@ -344,7 +372,9 @@ USE demo;
 SHOW CREATE SPACE demo;
 ```
 
-## 创建 Schema
+---
+
+### 4.4 创建 Schema
 
 ```ngql
 CREATE TAG IF NOT EXISTS person(name STRING, age INT);
@@ -354,7 +384,9 @@ SHOW TAGS; SHOW EDGES;
 
 > 若立即插入报 `TagNotFound/EdgeNotFound`：DDL 异步生效，稍等重试即可。
 
-## 插入数据
+---
+
+### 4.5 插入数据
 
 ```ngql
 INSERT VERTEX person(name, age) VALUES
@@ -372,7 +404,9 @@ Alice(1) ──→ Bob(2) ──→ David(4)
     └────→ David(4)
 ```
 
-## 查询
+---
+
+### 4.6 查询
 
 ```ngql
 FETCH PROP ON person 1, 2, 3 YIELD id(vertex), properties(vertex);   # 按 VID 取属性
@@ -382,7 +416,9 @@ MATCH (a:person)-[:knows]->(b:person) WHERE id(a) == 1
 RETURN a.person.name, b.person.name;                                  # 声明式匹配
 ```
 
-## 查看执行计划
+---
+
+### 4.7 查看执行计划
 
 以同一条查询为例，用**三种方式**执行，对照输出差别：
 
@@ -397,9 +433,11 @@ EXPLAIN FORMAT="row" GO FROM 1 OVER knows YIELD dst(edge) AS friend_id;
 PROFILE FORMAT="row" GO FROM 1 OVER knows YIELD dst(edge) AS friend_id;
 ```
 
-# Part 5 nGQL 语法
+---
 
-## 5.1 语言风格
+## 5 nGQL 语法
+
+### 5.1 语言风格
 
 **nGQL = 原生 nGQL（命令式）+ openCypher 兼容语句（声明式）**。
 
@@ -416,13 +454,13 @@ PROFILE FORMAT="row" GO FROM 1 OVER knows YIELD dst(edge) AS friend_id;
 
 3. 引用点属性**必须带 Tag**（`v.player.name` 而非 `v.name`）；边属性可直接 `e.degree`（边只有一个 Edge type）。
 
-## 5.2 书写规范
+### 5.2 书写规范
 
 - 关键字/函数**不区分**大小写（`SHOW SPACES`= `show spaces`）；**标识符**区分大小写（空间名/Tag/Edge type/属性名/变量）。
 
 - 语句以 `;` 结束；多语句以分号分隔（返回最后一个结果）；续行在行尾加 `\`。
 
-## 5.3 数据类型
+### 5.3 数据类型
 
 | 类别 | 说明 |
 |---|---|
@@ -435,9 +473,11 @@ PROFILE FORMAT="row" GO FROM 1 OVER knows YIELD dst(edge) AS friend_id;
 | 复合类型 | `List []`、`Set {}`、`Map {}` **不能作为点/边属性存储**（仅表达式/中间结果可用） |
 | 地理空间 | `GEOGRAPHY`（点/线/面），插入需经 `ST_GeogFromText` 等函数 |
 
-## 5.4 DDL
+---
 
-### 创建
+### 5.4 DDL
+
+#### 创建
 
 整体流程：**CREATE SPACE** -> `USE` -> 建 Tag/Edge
 
@@ -464,7 +504,7 @@ CREATE TAG [IF NOT EXISTS] <tag_name> (
 
 ---
 
-### 查看
+#### 查看
 
 查看当前 Space 里有哪些 Tag / Edge type（只列名字）：
 
@@ -486,7 +526,7 @@ SHOW CREATE TAG player
 
 ---
 
-### 修改 / 删除
+#### 修改 / 删除
 
 统一语法模板如下（`TAG` 换成 `EDGE` 即作用于边类型）：
 
@@ -520,7 +560,7 @@ SHOW CREATE TAG player;                          # 改完回看定义，确认�
 
 ---
 
-### 索引
+#### 索引
 
 NebulaGraph 里“点/边”本身是按 VID 组织存储的，所以“我知道 VID，取这个点的属性”不需要任何索引，直接按点查（`FETCH PROP` 就是干这个的）。但现实里更多查询是“我不知道 VID，只知道条件”，比如查找“名字是 'Tim' 的球员”。这需要从一堆点里按属性筛：那就必须有一份“属性 -> VID”的倒排 KV。这份 KV 不会自动存在，得靠额外 `CREATE INDEX` 建。所以：
 
@@ -548,9 +588,11 @@ SHOW TAG INDEX STATUS;
 
 - `SHOW ... STATUS` 就是去查看所有索引的最近一次的 rebuild 任务的状态：QUEUE（排队）-> RUNNING（在跑）-> FINISHED（成功）/ FAILED（失败，可查日志重试）。
 
-## 5.5 DML
+---
 
-### INSERT VERTEX
+### 5.5 DML
+
+#### INSERT VERTEX
 
 语法模板和样例如下：
 
@@ -567,7 +609,7 @@ INSERT VERTEX player(name, age) VALUES "player100":("Tim", 42), "player101":("To
 
 ---
 
-### INSERT EDGE
+#### INSERT EDGE
 
 ```ngql
 INSERT EDGE [IF NOT EXISTS] <edge_type>(<props>) VALUES <src>-><dst>[@rank]:(<vals>), ...;
@@ -580,7 +622,7 @@ INSERT EDGE follow(degree) VALUES "player100"->"player101":(95);
 
 ---
 
-### UPDATE / UPSERT / DELETE
+#### UPDATE / UPSERT / DELETE
 
 | 语句 | 目标不存在时 | 目标存在时 | 是否读旧值 | 改的是“整行”还是“指定列” |
 |---|---|---|---|---|
@@ -619,9 +661,11 @@ DELETE EDGE follow <src>-><dst>[@rank];     # 不带 rank 只删 rank=0
 >
 > 所以 Nebula 选快速失败：拿不到锁直接返回 `E_DATA_CONFLICT_ERROR`，把重试/退避/攒批的节奏**踢回客户端**。高并发下真正该做的不是把队列排得更优雅，而是**别让每个请求都做一次分片内读改写**（应用层先合并）。
 
-## 5.6 DQL ★
+---
 
-### FETCH PROP
+### 5.6 DQL ★
+
+#### FETCH PROP
 
 已知 VID，取属性，不需要索引。语法示例如下：
 
@@ -633,7 +677,7 @@ FETCH PROP ON serve "player100"->"team204" YIELD properties(edge).start_year;   
 
 ---
 
-### GO
+#### GO
 
 - 命令式图遍历：告诉它“从这几个点出发、沿着哪类边、走几步、怎么筛、吐出什么”，它一步一步物理地沿边走。
 
@@ -674,7 +718,7 @@ GO FROM "player100" OVER follow, serve YIELD properties(edge).degree, properties
 
 ---
 
-### MATCH
+#### MATCH
 
 - 声明式模式匹配：只写“我要找长得什么样的子图”，至于先扫谁、怎么走，引擎说了算。
 
@@ -696,8 +740,6 @@ MATCH <pattern> [WHERE ...] RETURN <cols> [ORDER BY][LIMIT];
 | 关系类型 | `-[e:follow]->` | 只走 follow 边，边变量叫 `e` |
 | 变长 | `-[e:follow*1..3]->` | 长度 1~3 跳都算；`*` 不带范围 = 任意长度（1..∞）；`*..5` = 1..5 跳 |
 | 整条路径赋值 | `p = (a)-[e*..5]-(b)` | 把匹配到的整条路径存进变量 `p`（如最短路径场景） |
-
-
 
 ```ngql
 MATCH (v:player) RETURN v.player.name AS Name LIMIT 5;                      # 找所有 player 点
@@ -725,7 +767,7 @@ MATCH p = allShortestPaths((a:player{name:"Tim"})-[e*..5]-(b:player{name:"Tony"}
 
 ---
 
-### OPTIONAL MATCH
+#### OPTIONAL MATCH
 
 只是多了个 `OPTIONAL` 修饰词，而这个词把整条子句的语义从 INNER JOIN 换成了 LEFT JOIN。区别就一点：匹配不上时，行保留，缺的字段给 NULL。
 
@@ -737,7 +779,7 @@ RETURN id(m), id(n), id(l);     # 找不到 l 返回 __NULL__
 
 ---
 
-### LOOKUP
+#### LOOKUP
 
 - 按属性条件找点/边：LOOKUP = “我只有属性条件，不知道 VID，把符合条件的 VID/边捞出来。”
 
@@ -772,7 +814,7 @@ LOOKUP ON player YIELD id(vertex) | LIMIT 4;
 
 ---
 
-### FIND PATH / GET SUBGRAPH —— 路径与子图
+#### FIND PATH / GET SUBGRAPH —— 路径与子图
 
 `FIND PATH`：把 FROM 和 TO 之间的路径找出来，返回给路径变量 `p`。语法模板如下：
 
@@ -837,7 +879,7 @@ GET SUBGRAPH WITH PROP 2 STEPS FROM "player101" YIELD VERTICES AS nodes, EDGES A
 
 ---
 
-### SHOW
+#### SHOW
 
 | 类 | 语句 | 问谁 | 回答的问题 |
 |---|---|---|---|
@@ -846,7 +888,9 @@ GET SUBGRAPH WITH PROP 2 STEPS FROM "player101" YIELD VERTICES AS nodes, EDGES A
 | 库内 schema | `SHOW TAGS` / `SHOW EDGES` / `SHOW TAG INDEXES` / `SHOW TAG INDEX STATUS` / `SHOW CREATE TAG xxx` | metad | 这个 space 里定义了哪些点/边类型、建了哪些索引、索引建好没 |
 | 统计 | `SUBMIT JOB STATS` / `SHOW STATS` | metad 派 job 到 storage 扫数，结果存回 metad | 图里各类点边各有多少——喂给优化器/代价模型 |
 
-## 5.7 子句与复合查询
+---
+
+### 5.7 子句与复合查询
 
 一条查询最后都会产出一张**表**。如何将查询结果写出来？Nebula 给了**两套**说法：
 
@@ -985,11 +1029,13 @@ GO FROM "player102" OVER follow YIELD dst(edge) AS id;
 
 把上面这些（管道、分号、变量、集合操作）串起来的多条语句，合称**复合查询**。它**没有事务/隔离性**：中途某一条失败，**不会回滚**前面已经执行成功的语句。涉及写操作时别指望“要么全做要么不做”，得在脚本里自己安排幂等或补偿。
 
-# Part 6 ★ nGQL 如何被执行
+---
+
+## 6 ★ nGQL 如何被执行
 
 > **追问一个问题：一条 nGQL 是怎么执行并返回结果的？**
 
-## 6.1 路径与时间线
+### 6.1 路径与时间线
 
 一条 nGQL 从用户在 console 回车、到结果回到屏幕，中间不是“数据库直接查一下”这么简单：graphd（查询引擎所在进程）内部要把它像订单一样沿一条**流水线**依次交给好几拨人处理——先**读懂**你写了什么，再**检查**有没有写错、用的变量名在不在，接着**画一张施工图**定好先干什么后干什么，最后才**照图干活**、把结果一路汇回来。
 
@@ -1035,7 +1081,9 @@ GO FROM "player102" OVER follow YIELD dst(edge) AS id;
 
 > 注意：表里第 1 行“服务入口”其实是**半个层 1 + 半个层 2**。`init` 的部分属于冷启动，“每请求建 QueryContext + QueryInstance”才属于层 2。它排在开头只是因为是代码入口、方便顺着读，**不代表每次查询前还要再初始化一遍**。
 
-## 6.2 执行计划
+---
+
+### 6.2 执行计划
 
 计划阶段产出的那份“施工图”，执行计划，**本身是一张有向无环图（DAG）**——一条查询要被切成一小串运算，再由调度器按先后去跑（6.1 第 6、7 步）。看懂它只需回答两个问题：**图上的一个点是什么？点和点之间的箭头又是什么意思？** 想清楚这两点，下面的算子清单就不用背——每个名字基本都能从你写过的 nGQL 猜出来。
 
@@ -1065,7 +1113,9 @@ Start ──► B 分支的若干节点 ──┘
 | 逻辑控制 | `Start`（图的起点/叶子）、`Loop`（把一段子计划重复跑 N 遍，多跳/变长用）、`Select`（条件分支） |
 | 其它 | DML → `executor/mutate/`；DDL → `executor/maintain/`；`SHOW TAGS` 等 → `executor/admin/` |
 
-## 6.3 EXPLAIN / PROFILE：把计划打出来看
+---
+
+### 6.3 EXPLAIN / PROFILE：把计划打出来看
 
 6.2 那张“施工图”平时藏在引擎里——用户只看得见查询的**最终结果**，看不见它是怎么被规划的。`EXPLAIN` / `PROFILE` 就是把它**打出来给你看**的两条命令。
 
@@ -1085,7 +1135,9 @@ PROFILE [format={"row"|"dot"|"tck"}] <nGQL>;   # 真执行 + 出计划与概要
 其中：
 
 - `row`：表格，每个算子占一行，**就是 6.2 说的“一个 PlanNode 一行”**；
+
 - `dot`：Graphviz 图，把依赖画成真正的箭头（更直观，日常读 row 即可）；
+
 - `tck`：供测试/脚本用的类表格。
 
 下面以 `row` 为例。一张表一个算子一行，5 列含义如下：
@@ -1100,3 +1152,4 @@ PROFILE [format={"row"|"dot"|"tck"}] <nGQL>;   # 真执行 + 出计划与概要
 
 **注意：表里没有 “est. rows / 预估行数” 这类预估列。** 因为 `EXPLAIN` 不执行，`profiling data` 整列是空的——引擎只能在你**跑完之后**告诉你“实际”多少行，没法在跑之前告诉你“大概”多少行。这本身就是“开源版无基数估计”的表现之一（见 6.4）。
 
+### 6.4 优化器

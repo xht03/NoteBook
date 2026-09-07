@@ -11,7 +11,18 @@ $base-style
 
     antialias()
 
-  h2, .h2
+  h2
+    position: relative
+    display: block
+    margin-top: 2rem
+    margin-bottom: .5rem
+    color: $color-accent-1
+    text-transform: none
+    letter-spacing: normal
+    font-weight: bold
+    font-size: 1.3rem
+
+  .h2
     position: relative
     display: block
     margin-top: 2rem
@@ -23,26 +34,36 @@ $base-style
     font-size: 1rem
 
   h3
-    color: $color-accent-2
-    text-decoration: underline
-    font-weight: bold
-    font-size: .9rem
-
-  h4
-  h5
-  h6
-    display: inline
-    text-decoration: none
-    color: $color-accent-3
-    font-weight: bold
-    font-size: .9rem
-
-  h3
-  h4
-  h5
-  h6
-    margin-top: .9rem
+    display: block
+    margin-top: 1.5rem
     margin-bottom: .5rem
+    color: $color-accent-1
+    font-weight: bold
+    font-size: 1.2rem
+
+  h4
+    display: block
+    margin-top: 1.2rem
+    margin-bottom: .4rem
+    color: $color-accent-1
+    font-weight: bold
+    font-size: 1.1rem
+
+  h5
+    display: block
+    margin-top: 1rem
+    margin-bottom: .4rem
+    color: $color-accent-1
+    font-weight: bold
+    font-size: 1.05rem
+
+  h6
+    display: block
+    margin-top: 1rem
+    margin-bottom: .4rem
+    color: $color-accent-1
+    font-weight: bold
+    font-size: 1rem
 
   hr
     border: .5px dashed $color-accent-3
@@ -101,16 +122,15 @@ $base-style
     border-collapse: collapse
     text-align: left
     font-size: $font-size - 2px
-    overflow: auto
-    display: block
 
   th
-    padding: 8px
-    border-bottom: 1px dashed $color-border
+    padding: 8px 10px
+    border-bottom: 2px solid $color-border
     color: $color-accent-2
     font-weight: bold
     font-size: $font-size - 1px
 
   td
-    padding: 0 8px
-    border-bottom: none
+    padding: 8px 10px
+    border-bottom: 1px dashed rgba($color-border, .5)
+    vertical-align: top
