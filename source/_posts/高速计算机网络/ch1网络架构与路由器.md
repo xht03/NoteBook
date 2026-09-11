@@ -1,5 +1,5 @@
 ---
-title: HSN 1 高速网络架构
+title: HSN 1 High-speed network architecture
 date: 2026-09-10 21:30:00
 tags:
 - note
@@ -7,7 +7,7 @@ categories:
 - High Speed Networks
 ---
 
-本篇笔记源自 *High Performance Switches and Routers*（Chao & Liu）第 1 章 Introduction。这一章是全书的地基：它先交代互联网长什么样、路由器长什么样，再说明白为什么“造一台又快又全能的大路由器”这么难。按顺序读下来是三条线：
+本篇笔记源自 *High Performance Switches and Routers（Chao & Liu）* 第 1 章。这一章是全书的地基：它先交代互联网长什么样、路由器长什么样，再说明白为什么“造一台又快又全能的大路由器”这么难。按顺序读下来是三条线：
 
 | 主线 | 教材小节 | 回答的问题 | 优先级 |
 |---|---|---|---|
@@ -107,7 +107,7 @@ categories:
 >
 > 本书写于 **2005–2006 年**，正卡在这个转折点上——所以书里说的“未来”，有一部分其实是当时正在发生的事。
 
-### 1.5 主干网的设计：没有统一答案
+### 1.5 主干网的设计
 
 与 POP 内部结构相对统一不同，**主干网的设计因服务提供商而异**。书里对比了美国三家的三种范式：
 
